@@ -16,6 +16,51 @@ Azure Cosmos DB is a globally distributed multi-model database. One of the suppo
 
 ### Prerequisites
 
+- Install [direnv](https://direnv.net/).
+
+- Create `.envrc` file with the following similar content.
+
+```shell
+source_env ${HOME}
+
+JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home"
+PATH="${JAVA_HOME}/bin:${PATH}"
+export PATH
+
+export M2_HOME="${HOME}/Downloads/apache-maven-3.9.1"
+PATH="${M2_HOME}/bin:${PATH}"
+export PATH
+
+URI='CHANGEME_AZURE_COSMOS_ACCOUNT_URI'
+KEY='CHANGEME_AZURE_COSMOS_ACCOUNT_KEY'
+```
+
+- Run the following command.
+
+```shell
+mvn exec:java@sync -DACCOUNT_HOST=${URI} -DACCOUNT_KEY=${KEY}
+```
+
+- The solution still cannot run as it contains error.
+
+```text
+[com.azure.cosmos.sample.sync.SyncMain.main()] INFO SyncMain - Create database AzureSampleFamilyDB if not exists.
+[cosmos-rntbd-nio-2-2] WARN com.azure.cosmos.implementation.directconnectivity.rntbd.RntbdClientChannelPool - channel acquisition failed due to
+[cosmos-rntbd-nio-2-1] WARN com.azure.cosmos.implementation.directconnectivity.rntbd.RntbdClientChannelPool - channel acquisition failed due to
+io.netty.channel.ConnectTimeoutException: connection timed out: cdb-ms-prod-westeurope1-fd58.documents.azure.com/13.69.66.21:11006
+        at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:261)
+        at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+        at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153)
+        at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174)
+        at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167)
+        at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470)
+        at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+        at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+        at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+        at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+        at java.base/java.lang.Thread.run(Thread.java:1623)
+```
+
 * Before you can run this sample, you must have the following prerequisites:
 
    * An active Azure account. If you don't have one, you can sign up for a [free account](https://azure.microsoft.com/free/). Alternatively, you can use the [Azure Cosmos DB Emulator](https://azure.microsoft.com/documentation/articles/documentdb-nosql-local-emulator) for this tutorial. As the emulator https certificate is self signed, you need to import its certificate to the java trusted certificate store as [explained here](https://docs.microsoft.com/azure/cosmos-db/local-emulator-export-ssl-certificates).
